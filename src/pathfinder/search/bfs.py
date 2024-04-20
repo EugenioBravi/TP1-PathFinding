@@ -11,7 +11,7 @@ class BreadthFirstSearch:
 
         Args:
             grid (Grid): Grid of points
-            
+           
         Returns:
             Solution: Solution found
         """
@@ -19,9 +19,40 @@ class BreadthFirstSearch:
         node = Node("", grid.start, 0)
 
         # Initialize the explored dictionary to be empty
-        explored = {} 
-        
+        explored = {}
+       
         # Add the node to the explored dictionary
         explored[node.state] = True
-        
-        return NoSolution(explored)
+        if node.state == grid.end:
+            return Solution(node, explored)
+
+        # Initialize the frontier with the initial node
+        # In this example, the frontier is a queue
+        frontier = QueueFrontier()
+        frontier.add(node)
+
+        while True:
+            #  Fail if the frontier is empty
+            if frontier.is_empty():
+                return NoSolution(explored)
+
+            # Remove a node from the frontier
+            node = frontier.remove()
+
+            # Go right
+            successors = grid.get_neighbours(node.state)
+            for direccion_movimiento in successors:
+
+                # Get the successor
+                movimiento = successors[direccion_movimiento]
+                if not explored.get(movimiento,False):
+                    new_node = Node("", movimiento,
+                                    node.cost + grid.get_cost(movimiento),
+                                    parent=node, action=direccion_movimiento)
+
+                    # Mark the successor as reached
+                    if new_node.state == grid.end:
+                        return Solution(new_node, explored)
+                   
+                    explored[movimiento] = True
+                    frontier.add(new_node)
