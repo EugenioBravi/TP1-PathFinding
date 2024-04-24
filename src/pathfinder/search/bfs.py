@@ -15,44 +15,44 @@ class BreadthFirstSearch:
         Returns:
             Solution: Solution found
         """
-        # Initialize a node with the initial position
+        # Inicializamos el nodo en la posicion inicial
         node = Node("", grid.start, 0)
 
-        # Initialize the explored dictionary to be empty
+        # Inicializamos el diccionaio vacio
         explored = {}
        
-        # Add the node to the explored dictionary
+        # Agregamos el nodo al diccionario de explorados
         explored[node.state] = True
         if node.state == grid.end:
             return Solution(node, explored)
 
-        # Initialize the frontier with the initial node
-        # In this example, the frontier is a queue
+        # Se inicializa la frontera con el nodo inicial
+        # En este ejemplo la frontera es una cola
         frontier = QueueFrontier()
         frontier.add(node)
 
         while True:
-            #  Fail if the frontier is empty
+            # Si la frontera esta vacia, no hay solucion
             if frontier.is_empty():
                 return NoSolution(explored)
 
-            # Remove a node from the frontier
+            # Sacamos un nodo de la frontera
             node = frontier.remove()
 
-            # Go right
+            # Conseguimos todos los posibles movimientos
             successors = grid.get_neighbours(node.state)
             for direccion_movimiento in successors:
 
-                # Get the successor
+                # Seleccionamos el sucesor
                 movimiento = successors[direccion_movimiento]
                 if not explored.get(movimiento,False):
                     new_node = Node("", movimiento,
                                     node.cost + grid.get_cost(movimiento),
                                     parent=node, action=direccion_movimiento)
 
-                    # Mark the successor as reached
                     if new_node.state == grid.end:
                         return Solution(new_node, explored)
                    
-                    explored[movimiento] = True
+                    # Se marca al sucesor como alcanzado
+                    explored[movimiento] = True                   
                     frontier.add(new_node)
