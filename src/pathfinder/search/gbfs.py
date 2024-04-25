@@ -43,21 +43,21 @@ class GreedyBestFirstSearch:
             # Remove a node from the frontier
             node = frontier.pop()
 
-            # Go right
-            successors = grid.get_neighbours(node.state)
-            for direccion_movimiento in successors:
+            # Conseguimos todos los posibles movimientos para al nodo actual
+            posibles_direcciones = grid.get_neighbours(node.state)
+            for direccion in posibles_direcciones:
 
                 # Get the successor
-                movimiento = successors[direccion_movimiento]
-                cost = node.cost + grid.get_cost(movimiento)
-                if not explored.get(movimiento,False) or cost < explored.get(movimiento,False):
-                    new_node = Node("", movimiento,
+                new_state = posibles_direcciones[direccion]
+                cost = node.cost + grid.get_cost(new_state)
+                if not explored.get(new_state,False) or cost < explored[new_state]:
+                    new_node = Node("", new_state,
                                     cost,
-                                    parent=node, action=direccion_movimiento)
+                                    parent=node, action=direccion)
 
                     if new_node.state == grid.end:
                         return Solution(new_node, explored)
                     
                    # Mark the successor as reached
-                    explored[movimiento] = cost
+                    explored[new_state] = cost
                     frontier.add(new_node,heuristica(new_node, grid.end))

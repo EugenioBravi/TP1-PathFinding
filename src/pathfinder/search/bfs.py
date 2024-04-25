@@ -18,7 +18,7 @@ class BreadthFirstSearch:
         # Inicializamos el nodo en la posicion inicial
         node = Node("", grid.start, 0)
 
-        # Inicializamos el diccionaio vacio
+        # Inicializamos el diccionaio de nodos explorados vacio
         explored = {}
        
         # Agregamos el nodo al diccionario de explorados
@@ -39,20 +39,20 @@ class BreadthFirstSearch:
             # Sacamos un nodo de la frontera
             node = frontier.remove()
 
-            # Conseguimos todos los posibles movimientos
-            successors = grid.get_neighbours(node.state)
-            for direccion_movimiento in successors:
+            # Conseguimos todos los posibles movimientos para al nodo actual
+            posibles_direcciones = grid.get_neighbours(node.state)
+            for direccion in posibles_direcciones:
 
                 # Seleccionamos el sucesor
-                movimiento = successors[direccion_movimiento]
-                if not explored.get(movimiento,False):
-                    new_node = Node("", movimiento,
-                                    node.cost + grid.get_cost(movimiento),
-                                    parent=node, action=direccion_movimiento)
+                new_state = posibles_direcciones[direccion]
+                if not explored.get(new_state,False):
+                    new_node = Node("", new_state,
+                                    node.cost + grid.get_cost(new_state),
+                                    parent=node, action=direccion)
 
                     if new_node.state == grid.end:
                         return Solution(new_node, explored)
                    
-                    # Se marca al sucesor como alcanzado
-                    explored[movimiento] = True                   
+                    # Se marca al nuevo estado como alcanzado
+                    explored[new_state] = True                   
                     frontier.add(new_node)
