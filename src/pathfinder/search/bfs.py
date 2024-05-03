@@ -7,7 +7,9 @@ from ..models.node import Node
 class BreadthFirstSearch:
     @staticmethod
     def search(grid: Grid) -> Solution:
-        """Find path between two points in a grid using Breadth First Search
+        """
+        Encuentra la ruta entre dos puntos en una cuadrícula usando Búsqueda en anchura.
+
 
         Args:
             grid (Grid): Grid of points
@@ -18,7 +20,8 @@ class BreadthFirstSearch:
         # Inicializamos el nodo en la posicion inicial
         node = Node("", grid.start, 0)
 
-        # Inicializamos el diccionaio de nodos explorados vacio
+
+        # Inicializamos el diccionario de nodos explorados vacio
         explored = {}
        
         # Agregamos el nodo al diccionario de explorados
@@ -40,19 +43,21 @@ class BreadthFirstSearch:
             node = frontier.remove()
 
             # Conseguimos todos los posibles movimientos para al nodo actual
-            posibles_direcciones = grid.get_neighbours(node.state)
-            for direccion in posibles_direcciones:
+            posibles_directions = grid.get_neighbours(node.state)
+            for direction in posibles_directions:
+
 
                 # Seleccionamos el sucesor
-                new_state = posibles_direcciones[direccion]
+                new_state = posibles_directions[direction]
                 if not explored.get(new_state,False):
                     new_node = Node("", new_state,
                                     node.cost + grid.get_cost(new_state),
-                                    parent=node, action=direccion)
+                                    parent=node, action=direction)
+
 
                     if new_node.state == grid.end:
                         return Solution(new_node, explored)
                    
                     # Se marca al nuevo estado como alcanzado
-                    explored[new_state] = True                   
+                    explored[new_state] = True                  
                     frontier.add(new_node)
